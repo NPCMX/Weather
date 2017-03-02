@@ -1,6 +1,7 @@
 package com.weather.android;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -80,12 +81,28 @@ public class chooseAreaFragment extends Fragment {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (currentLevel == LEVEL_PROVINCE){
-                    selectedProvince = mProvinceList.get(position);
-                    queryCities();
-                }else if (currentLevel == LEVEL_CITY){
-                    selectedCity = mCityList.get(position);
-                    queryCounties();
+//                if (currentLevel == LEVEL_PROVINCE){
+//                    selectedProvince = mProvinceList.get(position);
+//                    queryCities();
+//                }else if (currentLevel == LEVEL_CITY){
+//                    selectedCity = mCityList.get(position);
+//                    queryCounties();
+//                }
+                switch (currentLevel){
+                    case LEVEL_PROVINCE:
+                        selectedProvince = mProvinceList.get(position);
+                        queryCities();
+                        break;
+                    case LEVEL_CITY:
+                        selectedCity = mCityList.get(position);
+                        queryCounties();
+                        break;
+                    case LEVEL_COUNTY:
+                        String weatherId = mCountyList.get(position).getWeatherId();
+                        Intent intent = new Intent(getActivity(),WeatherActivity.class);
+                        intent.putExtra("weather_id",weatherId);
+                        startActivity(intent);
+                        getActivity().finish();
                 }
             }
         });
